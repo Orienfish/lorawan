@@ -163,6 +163,9 @@ SimpleGatewayLoraPhy::StartReceive (Ptr<Packet> packet, double rxPowerDbm, uint8
           // for that spreading factor
           double sensitivity = SimpleGatewayLoraPhy::sensitivity[unsigned (sf) - 7];
 
+          NS_LOG_DEBUG ("gw sensitivity " << sensitivity);
+          NS_LOG_DEBUG ("rxPowerDbm " << rxPowerDbm);
+
           if (rxPowerDbm < sensitivity) // Packet arrived below sensitivity
             {
               NS_LOG_INFO ("Dropping packet reception of packet with sf = "
