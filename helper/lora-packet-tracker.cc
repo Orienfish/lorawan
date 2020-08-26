@@ -348,6 +348,44 @@ LoraPacketTracker::PrintPhyPacketsPerGw (Time startTime, Time stopTime,
   return output;
 }
 
+std::vector<int>
+LoraPacketTracker::CountPhyPacketsPerEd (Time startTime, Time stopTime,
+                                         int edId)
+{
+  // Vector packetCounts will contain - for the interval given in the input of
+  // the function, the following fields: totPacketsSent receivedPackets
+
+  std::vector<int> packetCounts (2, 0);
+
+  for (auto itPhy = m_packetTracker.begin ();
+       itPhy != m_packetTracker.end ();
+       ++itPhy)
+    {
+      if ((*itPhy).second.sendTime >= startTime && (*itPhy).second.sendTime <= stopTime)
+        {
+          packetCounts.at (0)++;
+
+          if ((*itPhy).second.senderId == edId)
+            {
+              NS_LOG_DEBUG ("Dealing with packet " << (*itPhy).second.packet);
+              for (auto itGw = (*itPhy).second.outcomes.begin();
+                   itGw != (*itPhy).second.outcomes.end();
+                   ++itGw)
+              {
+                if ((*itGw).second == RECEIVED) // if packet is received at any one GW
+                  {
+                    packetCounts.at (1)++;
+                    NS_LOG_DEBUG ("This packet was received by gateway ID " << (*itGw).first);
+                    break;
+                  }
+              }
+            }
+        }
+    }
+
+  return packetCounts;
+}
+
   std::string
   LoraPacketTracker::CountMacPacketsGlobally (Time startTime, Time stopTime)
   {
