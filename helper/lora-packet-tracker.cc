@@ -361,13 +361,14 @@ LoraPacketTracker::CountPhyPacketsPerEd (Time startTime, Time stopTime,
        itPhy != m_packetTracker.end ();
        ++itPhy)
     {
+      NS_LOG_DEBUG ("Dealing with packet " << (*itPhy).second.packet);
+
       if ((*itPhy).second.sendTime >= startTime && (*itPhy).second.sendTime <= stopTime)
         {
           packetCounts.at (0)++;
 
           if ((*itPhy).second.senderId == edId)
             {
-              NS_LOG_DEBUG ("Dealing with packet " << (*itPhy).second.packet);
               for (auto itGw = (*itPhy).second.outcomes.begin();
                    itGw != (*itPhy).second.outcomes.end();
                    ++itGw)
@@ -378,6 +379,8 @@ LoraPacketTracker::CountPhyPacketsPerEd (Time startTime, Time stopTime,
                     NS_LOG_DEBUG ("This packet was received by gateway ID " << (*itGw).first);
                     break;
                   }
+
+                  NS_LOG_DEBUG ("This packet was lost");
               }
             }
         }
