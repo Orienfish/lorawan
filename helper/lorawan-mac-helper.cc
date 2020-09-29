@@ -668,5 +668,31 @@ LorawanMacHelper::SetSpreadingFactorsGivenDistribution (NodeContainer endDevices
 
 } //  end function
 
+std::vector<int>
+LorawanMacHelper::SetSpreadingFactors (NodeContainer endDevices, std::vector<int> SFVec)
+{
+  NS_LOG_FUNCTION_NOARGS ();
+
+  std::vector<int> sfQuantity (7, 0);
+  for (NodeContainer::Iterator j = endDevices.Begin (); j != endDevices.End (); ++j)
+    {
+      Ptr<Node> object = *j;
+      int nodeId = object->GetId();
+
+      Ptr<NetDevice> netDevice = object->GetDevice (0);
+      Ptr<LoraNetDevice> loraNetDevice = netDevice->GetObject<LoraNetDevice> ();
+      NS_ASSERT (loraNetDevice != 0);
+      Ptr<ClassAEndDeviceLorawanMac> mac =
+          loraNetDevice->GetMac ()->GetObject<ClassAEndDeviceLorawanMac> ();
+      NS_ASSERT (mac != 0);
+
+      mac->SetDataRate (SFVec[nodeId]);
+      sfQuantity[SFVec[nodeId]] = sfQuantity[SFVec[nodeId]] + 1;
+    }
+
+  return sfQuantity;
+
+} // end function
+
 } // namespace lorawan
 } // namespace ns3

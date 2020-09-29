@@ -117,6 +117,12 @@ public:
                                                                 NodeContainer gateways,
                                                                 std::vector<double> distribution);
 
+    /**
+   * Set up the end device's data rates according to the given assignments.
+   */
+  static std::vector<int> SetSpreadingFactors (NodeContainer endDevices, 
+                                                                 std::vector<int> SFVec);
+
 private:
   /**
    * Perform region-specific configurations for the 868 MHz EU band.
