@@ -91,24 +91,26 @@ LoraPhyHelper::Create (Ptr<Node> node, Ptr<NetDevice> device) const
 
       // We expect that MacHelper instances will overwrite this setting if the
       // device will operate in a different region
-      std::vector<double> frequencies;
-      frequencies.push_back (868.1);
-      frequencies.push_back (868.3);
-      frequencies.push_back (868.5);
 
-      for (auto &f : frequencies)
-        {
-          phy->GetObject<SimpleGatewayLoraPhy> ()->AddFrequency (f);
-        }
+      // Latest note: The MacHelper is responsible for this setting.
+      //std::vector<double> frequencies;
+      //frequencies.push_back (868.1);
+      //frequencies.push_back (868.3);
+      //frequencies.push_back (868.5);
 
-      int receptionPaths = 0;
+      //for (auto &f : frequencies)
+      //  {
+      //    phy->GetObject<SimpleGatewayLoraPhy> ()->AddFrequency (f);
+      //  }
+
+      //int receptionPaths = 0;
       // Set maxReceptionPaths as a parameter
       // int maxReceptionPaths = 8;
-      while (receptionPaths < m_maxReceptionPaths)
-        {
-          phy->GetObject<SimpleGatewayLoraPhy> ()->AddReceptionPath ();
-          receptionPaths++;
-        }
+      //while (receptionPaths < m_maxReceptionPaths)
+      //  {
+      //    phy->GetObject<SimpleGatewayLoraPhy> ()->AddReceptionPath ();
+      //    receptionPaths++;
+      //  }
     }
   else if (typeId == "ns3::SimpleEndDeviceLoraPhy")
     {

@@ -136,10 +136,22 @@ private:
   void ConfigureForEuRegion (Ptr<GatewayLorawanMac> gwMac) const;
 
   /**
+   * Perform region-specific configurations for the 902 MHz US band.
+   */
+  void ConfigureForUsRegion (Ptr<ClassAEndDeviceLorawanMac> edMac) const;
+
+  /**
+   * Perform region-specific configurations for the 902 MHz US band.
+   */
+  void ConfigureForUsRegion (Ptr<GatewayLorawanMac> gwMac) const;
+
+  /**
    * Apply configurations that are common both for the GatewayLorawanMac and the
    * ClassAEndDeviceLorawanMac classes.
    */
   void ApplyCommonEuConfigurations (Ptr<LorawanMac> lorawanMac) const;
+
+  void ApplyCommonUsConfigurations (Ptr<LorawanMac> lorawanMac) const;
 
   /**
    * Perform region-specific configurations for the SINGLECHANNEL band.
