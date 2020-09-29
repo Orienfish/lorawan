@@ -118,10 +118,11 @@ public:
                                                                 std::vector<double> distribution);
 
     /**
-   * Set up the end device's data rates according to the given assignments.
+   * Set up the end device's data rates and transmission power according to the given assignments.
    */
-  static std::vector<int> SetSpreadingFactors (NodeContainer endDevices, 
-                                                                 std::vector<int> SFVec);
+  static std::vector<int> SetParams (NodeContainer endDevices, 
+                                               std::vector<int> SFVec,
+                                               std::vector<double> TxPowVec);
 
 private:
   /**

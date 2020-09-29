@@ -107,7 +107,7 @@ EndDeviceLorawanMac::EndDeviceLorawanMac ()
     : m_enableDRAdapt (false),
       m_maxNumbTx (8),
       m_dataRate (0),
-      m_txPower (14),
+      m_txPower (20),
       m_codingRate (1),
       // LoraWAN default
       m_headerDisabled (0),
@@ -669,6 +669,22 @@ EndDeviceLorawanMac::GetDataRate (void)
   NS_LOG_FUNCTION (this);
 
   return m_dataRate;
+}
+
+void
+EndDeviceLorawanMac::SetTxPower (double txPower)
+{
+  NS_LOG_FUNCTION (this << txPower);
+
+  m_txPower = txPower;
+}
+
+double
+EndDeviceLorawanMac::GetTxPower (void)
+{
+  NS_LOG_FUNCTION (this);
+
+  return m_txPower;
 }
 
 void

@@ -669,7 +669,8 @@ LorawanMacHelper::SetSpreadingFactorsGivenDistribution (NodeContainer endDevices
 } //  end function
 
 std::vector<int>
-LorawanMacHelper::SetSpreadingFactors (NodeContainer endDevices, std::vector<int> SFVec)
+LorawanMacHelper::SetParams (NodeContainer endDevices, std::vector<int> SFVec, 
+                             std::vector<double> TxPowVec)
 {
   NS_LOG_FUNCTION_NOARGS ();
 
@@ -688,6 +689,7 @@ LorawanMacHelper::SetSpreadingFactors (NodeContainer endDevices, std::vector<int
 
       mac->SetDataRate (SFVec[nodeId]);
       sfQuantity[SFVec[nodeId]] = sfQuantity[SFVec[nodeId]] + 1;
+      mac->SetTxPower (TxPowVec[nodeId]);
     }
 
   return sfQuantity;
