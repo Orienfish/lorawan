@@ -207,6 +207,8 @@ LoraRadioEnergyModel::SetTxCurrentFromModel (double txPowerDbm)
   if (m_txCurrentModel)
     {
       m_txCurrentA = m_txCurrentModel->CalcTxCurrent (txPowerDbm);
+      std::cout << m_txCurrentModel->GetTypeId () << std::endl;
+      std::cout << "LoraRadioEnergyModel: Tx current is " << m_txCurrentA << std::endl;
     }
 }
 
@@ -225,15 +227,23 @@ LoraRadioEnergyModel::ChangeState (int newState)
     {
     case EndDeviceLoraPhy::STANDBY:
       energyToDecrease = duration.GetSeconds () * m_idleCurrentA * supplyVoltage;
+      std::cout << "LoraRadioEnergyModel: STANDBY, current is " << m_idleCurrentA << 
+        ", duration is " << duration.GetSeconds () << ", energy to decrease is " << energyToDecrease << std::endl;
       break;
     case EndDeviceLoraPhy::TX:
       energyToDecrease = duration.GetSeconds () * m_txCurrentA * supplyVoltage;
+      std::cout << "LoraRadioEnergyModel: Tx, current is " << m_txCurrentA << 
+        ", duration is " << duration.GetSeconds () << ", energy to decrease is " << energyToDecrease << std::endl;
       break;
     case EndDeviceLoraPhy::RX:
       energyToDecrease = duration.GetSeconds () * m_rxCurrentA * supplyVoltage;
+      std::cout << "LoraRadioEnergyModel: Rx, current is " << m_rxCurrentA << 
+        ", duration is " << duration.GetSeconds () << ", energy to decrease is " << energyToDecrease << std::endl;
       break;
     case EndDeviceLoraPhy::SLEEP:
       energyToDecrease = duration.GetSeconds () * m_sleepCurrentA * supplyVoltage;
+      std::cout << "LoraRadioEnergyModel: Sleep, current is " << m_sleepCurrentA << 
+        ", duration is " << duration.GetSeconds () << ", energy to decrease is " << energyToDecrease << std::endl;
       break;
     default:
       NS_FATAL_ERROR ("LoraRadioEnergyModel:Undefined radio state: " << m_currentState);
@@ -263,7 +273,7 @@ LoraRadioEnergyModel::ChangeState (int newState)
       SetLoraRadioState ((EndDeviceLoraPhy::State) newState);
 
       // some debug message
-      NS_LOG_DEBUG ("LoraRadioEnergyModel:Total energy consumption is " <<
+      NS_LOG_DEBUG ("LoraRadioEnergyModel: Total energy consumption is " <<
                     m_totalEnergyConsumption << "J");
     }
 

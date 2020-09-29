@@ -178,5 +178,73 @@ ConstantLoraTxCurrentModel::CalcTxCurrent (double txPowerDbm) const
   return m_txCurrent;
 }
 
+// Similarly to the wifi case
+NS_OBJECT_ENSURE_REGISTERED (LiandoLoraTxCurrentModel);
+
+TypeId
+LiandoLoraTxCurrentModel::GetTypeId (void)
+{
+  static TypeId tid = TypeId ("ns3::LiandoLoraTxCurrentModel")
+    .SetParent<LoraTxCurrentModel> ()
+    .SetGroupName ("Lora")
+    .AddConstructor<LiandoLoraTxCurrentModel> ()
+    .AddAttribute ("Voltage", "The supply voltage (in Volts).",
+                   DoubleValue (3.3),
+                   MakeDoubleAccessor (&LinearLoraTxCurrentModel::SetVoltage,
+                                       &LinearLoraTxCurrentModel::GetVoltage),
+                   MakeDoubleChecker<double> ())
+  ;
+  return tid;
+}
+
+LiandoLoraTxCurrentModel::LiandoLoraTxCurrentModel ()
+{
+  NS_LOG_FUNCTION (this);
+}
+
+LiandoLoraTxCurrentModel::~LiandoLoraTxCurrentModel ()
+{
+  NS_LOG_FUNCTION (this);
+}
+
+void
+LiandoLoraTxCurrentModel::SetVoltage (double voltage)
+{
+  NS_LOG_FUNCTION (this << voltage);
+  m_voltage = voltage;
+}
+
+double
+LiandoLoraTxCurrentModel::GetVoltage (void) const
+{
+  return m_voltage;
+}
+
+double
+LiandoLoraTxCurrentModel::CalcTxCurrent (double txPowerDbm) const
+{
+  NS_LOG_FUNCTION (this << txPowerDbm);
+  std::vector<double> PtxdBm {5.0, 8.0, 1.0, 14.0, 17.0, 20.0};
+  std::vector<double> PowerW {0.15, 0.2, 0.25, 0.3, 0.4, 0.4};
+
+  // Less than 5 dBm
+  if (txPowerDbm < PtxdBm[0])
+    std::cout << txPowerDbm << " " << PowerW[0] / m_voltage << std::endl;
+    return PowerW[0] / m_voltage;
+  for (std::size_t i = 1; i < PtxdBm.size(); ++i)
+  {
+    if (txPowerDbm < PtxdBm[i])
+    {
+      std::cout << txPowerDbm << " " << PowerW[i] - (PtxdBm[i] - txPowerDbm) * 
+        (PowerW[i] - PowerW[i-1]) / (PtxdBm[i] - PtxdBm[i-1]) << std::endl;
+      return PowerW[i] - (PtxdBm[i] - txPowerDbm) * 
+        (PowerW[i] - PowerW[i-1]) / (PtxdBm[i] - PtxdBm[i-1]);
+    }
+  }
+  // Exceed 20 dBm
+  std::cout << txPowerDbm << " " << PowerW[PowerW.size()-1] / m_voltage << std::endl;
+  return PowerW[PowerW.size()-1] / m_voltage;
+}
+
 }
 } // namespace ns3

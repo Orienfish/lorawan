@@ -132,6 +132,38 @@ private:
   double m_txCurrent;
 };
 
+/**
+ * Power model based on transmission power setting.
+ * Parameters obtained from Liando 2019 paper 
+ * "Known and Unknown Facts of LoRa: Experiences from a Large-scale Measurement Study"
+ */
+class LiandoLoraTxCurrentModel : public LoraTxCurrentModel
+{
+public:
+  static TypeId GetTypeId (void);
+
+  LiandoLoraTxCurrentModel ();
+  virtual ~LiandoLoraTxCurrentModel ();
+
+  /**
+   * \param voltage (Volts)
+   *
+   * Set the supply voltage.
+   */
+  void SetVoltage (double voltage);
+
+  /**
+   * \return the supply voltage.
+   */
+  double GetVoltage (void) const;
+
+
+  double CalcTxCurrent (double txPowerDbm) const;
+
+private:
+  double m_voltage;     //!< Voltage
+};
+
 } // namespace ns3
 
 }
