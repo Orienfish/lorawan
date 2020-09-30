@@ -365,10 +365,10 @@ LoraPacketTracker::CountPhyPacketsPerEd (Time startTime, Time stopTime,
 
       if ((*itPhy).second.sendTime >= startTime && (*itPhy).second.sendTime <= stopTime)
         {
-          packetCounts.at (0)++;
-
           if ((*itPhy).second.senderId == edId)
             {
+              packetCounts.at (0)++;
+
               for (auto itGw = (*itPhy).second.outcomes.begin();
                    itGw != (*itPhy).second.outcomes.end();
                    ++itGw)

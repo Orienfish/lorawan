@@ -190,8 +190,8 @@ LiandoLoraTxCurrentModel::GetTypeId (void)
     .AddConstructor<LiandoLoraTxCurrentModel> ()
     .AddAttribute ("Voltage", "The supply voltage (in Volts).",
                    DoubleValue (3.3),
-                   MakeDoubleAccessor (&LinearLoraTxCurrentModel::SetVoltage,
-                                       &LinearLoraTxCurrentModel::GetVoltage),
+                   MakeDoubleAccessor (&LiandoLoraTxCurrentModel::SetVoltage,
+                                       &LiandoLoraTxCurrentModel::GetVoltage),
                    MakeDoubleChecker<double> ())
   ;
   return tid;
@@ -229,20 +229,21 @@ LiandoLoraTxCurrentModel::CalcTxCurrent (double txPowerDbm) const
 
   // Less than 5 dBm
   if (txPowerDbm < PtxdBm[0])
-    std::cout << txPowerDbm << " " << PowerW[0] / m_voltage << std::endl;
+  {
     return PowerW[0] / m_voltage;
+  }
+
+  // Between 5 dBm and 20 dBm
   for (std::size_t i = 1; i < PtxdBm.size(); ++i)
   {
     if (txPowerDbm < PtxdBm[i])
     {
-      std::cout << txPowerDbm << " " << PowerW[i] - (PtxdBm[i] - txPowerDbm) * 
-        (PowerW[i] - PowerW[i-1]) / (PtxdBm[i] - PtxdBm[i-1]) << std::endl;
       return PowerW[i] - (PtxdBm[i] - txPowerDbm) * 
         (PowerW[i] - PowerW[i-1]) / (PtxdBm[i] - PtxdBm[i-1]);
     }
   }
+
   // Exceed 20 dBm
-  std::cout << txPowerDbm << " " << PowerW[PowerW.size()-1] / m_voltage << std::endl;
   return PowerW[PowerW.size()-1] / m_voltage;
 }
 
