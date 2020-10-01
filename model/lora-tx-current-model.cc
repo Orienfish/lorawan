@@ -226,11 +226,12 @@ LiandoLoraTxCurrentModel::CalcTxCurrent (double txPowerDbm) const
   NS_LOG_FUNCTION (this << txPowerDbm);
   std::vector<double> PtxdBm {5.0, 8.0, 1.0, 14.0, 17.0, 20.0};
   std::vector<double> PowerW {0.15, 0.2, 0.25, 0.3, 0.4, 0.4};
+  double P_MCU_On_W = 0.02348; // Power of MCU on in Watt
 
   // Less than 5 dBm
   if (txPowerDbm < PtxdBm[0])
   {
-    return PowerW[0] / m_voltage;
+    return (PowerW[0] + P_MCU_On_W) / m_voltage;
   }
 
   // Between 5 dBm and 20 dBm
@@ -238,13 +239,14 @@ LiandoLoraTxCurrentModel::CalcTxCurrent (double txPowerDbm) const
   {
     if (txPowerDbm < PtxdBm[i])
     {
-      return PowerW[i] - (PtxdBm[i] - txPowerDbm) * 
+      double P_Tx = PowerW[i] - (PtxdBm[i] - txPowerDbm) * 
         (PowerW[i] - PowerW[i-1]) / (PtxdBm[i] - PtxdBm[i-1]);
+      return (P_Tx + P_MCU_On_W) / m_voltage;
     }
   }
 
   // Exceed 20 dBm
-  return PowerW[PowerW.size()-1] / m_voltage;
+  return (PowerW[PowerW.size()-1] + P_MCU_On_W) / m_voltage;
 }
 
 }
