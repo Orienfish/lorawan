@@ -389,58 +389,184 @@ LoraPacketTracker::CountPhyPacketsPerEd (Time startTime, Time stopTime,
   return packetCounts;
 }
 
-  std::string
-  LoraPacketTracker::CountMacPacketsGlobally (Time startTime, Time stopTime)
-  {
-    NS_LOG_FUNCTION (this << startTime << stopTime);
+std::vector<int>
+LoraPacketTracker::CountPhyPacketsPerGwEd (Time startTime, Time stopTime,
+                                         int gwId, int edId)
+{
+  // Vector packetCounts will contain - for the interval given in the input of
+  // the function, the following fields: totPacketsSent receivedPackets
 
-    double sent = 0;
-    double received = 0;
-    for (auto it = m_macPacketTracker.begin ();
-         it != m_macPacketTracker.end ();
-         ++it)
-      {
-        if ((*it).second.sendTime >= startTime && (*it).second.sendTime <= stopTime)
-          {
-            sent++;
-            if ((*it).second.receptionTimes.size ())
-              {
-                received++;
-              }
-          }
-      }
+  std::vector<int> packetCounts (6, 0);
 
-    return std::to_string (sent) + " " +
-      std::to_string (received);
-  }
+  for (auto itPhy = m_packetTracker.begin ();
+       itPhy != m_packetTracker.end ();
+       ++itPhy)
+    {
+      NS_LOG_DEBUG ("Dealing with packet " << (*itPhy).second.packet);
 
-  std::string
-  LoraPacketTracker::CountMacPacketsGloballyCpsr (Time startTime, Time stopTime)
-  {
-    NS_LOG_FUNCTION (this << startTime << stopTime);
+      if ((*itPhy).second.sendTime >= startTime && (*itPhy).second.sendTime <= stopTime)
+        {
+          if ((*itPhy).second.outcomes.count (gwId) > 0 && (*itPhy).second.senderId == edId)
+            {
+              packetCounts.at (0)++;
 
-    double sent = 0;
-    double received = 0;
-    for (auto it = m_reTransmissionTracker.begin ();
-         it != m_reTransmissionTracker.end ();
-         ++it)
-      {
-        if ((*it).second.firstAttempt >= startTime && (*it).second.firstAttempt <= stopTime)
-          {
-            sent++;
-            NS_LOG_DEBUG ("Found a packet");
-            NS_LOG_DEBUG ("Number of attempts: " << unsigned(it->second.reTxAttempts) <<
-                          ", successful: " << it->second.successful);
-            if (it->second.successful)
-              {
-                received++;
-              }
-          }
-      }
+              switch ((*itPhy).second.outcomes.at (gwId))
+                {
+                case RECEIVED:
+                  {
+                    packetCounts.at (1)++;
+                    break;
+                  }
+                case INTERFERED:
+                  {
+                    packetCounts.at (2)++;
+                    break;
+                  }
+                case NO_MORE_RECEIVERS:
+                  {
+                    packetCounts.at (3)++;
+                    break;
+                  }
+                case UNDER_SENSITIVITY:
+                  {
+                    packetCounts.at (4)++;
+                    break;
+                  }
+                case LOST_BECAUSE_TX:
+                  {
+                    packetCounts.at (5)++;
+                    break;
+                  }
+                case UNSET:
+                  {
+                    break;
+                  }
+                }
+            }
+        }
+    }
 
-    return std::to_string (sent) + " " +
-      std::to_string (received);
-  }
+  return packetCounts;
+}
+
+std::string
+LoraPacketTracker::PrintPhyPacketsPerGwEd (Time startTime, Time stopTime,
+                                         int gwId, int edId)
+{
+  // Vector packetCounts will contain - for the interval given in the input of
+  // the function, the following fields: totPacketsSent receivedPackets
+
+  std::vector<int> packetCounts (6, 0);
+  
+  for (auto itPhy = m_packetTracker.begin ();
+       itPhy != m_packetTracker.end ();
+       ++itPhy)
+    {
+      NS_LOG_DEBUG ("Dealing with packet " << (*itPhy).second.packet);
+
+      if ((*itPhy).second.sendTime >= startTime && (*itPhy).second.sendTime <= stopTime)
+        {
+          if ((*itPhy).second.outcomes.count (gwId) > 0 && (*itPhy).second.senderId == edId)
+            {
+              packetCounts.at (0)++;
+
+              switch ((*itPhy).second.outcomes.at (gwId))
+                {
+                case RECEIVED:
+                  {
+                    packetCounts.at (1)++;
+                    break;
+                  }
+                case INTERFERED:
+                  {
+                    packetCounts.at (2)++;
+                    break;
+                  }
+                case NO_MORE_RECEIVERS:
+                  {
+                    packetCounts.at (3)++;
+                    break;
+                  }
+                case UNDER_SENSITIVITY:
+                  {
+                    packetCounts.at (4)++;
+                    break;
+                  }
+                case LOST_BECAUSE_TX:
+                  {
+                    packetCounts.at (5)++;
+                    break;
+                  }
+                case UNSET:
+                  {
+                    break;
+                  }
+                }
+            }
+        }
+    }
+
+  std::string output ("");
+  for (int i = 0; i < 6; ++i)
+    {
+      output += std::to_string (packetCounts.at (i)) + " ";
+    }
+
+  return output;
+}
+
+std::string
+LoraPacketTracker::CountMacPacketsGlobally (Time startTime, Time stopTime)
+{
+  NS_LOG_FUNCTION (this << startTime << stopTime);
+
+  double sent = 0;
+  double received = 0;
+  for (auto it = m_macPacketTracker.begin ();
+       it != m_macPacketTracker.end ();
+       ++it)
+    {
+      if ((*it).second.sendTime >= startTime && (*it).second.sendTime <= stopTime)
+        {
+          sent++;
+          if ((*it).second.receptionTimes.size ())
+            {
+              received++;
+            }
+        }
+    }
+
+  return std::to_string (sent) + " " +
+    std::to_string (received);
+}
+
+std::string
+LoraPacketTracker::CountMacPacketsGloballyCpsr (Time startTime, Time stopTime)
+{
+  NS_LOG_FUNCTION (this << startTime << stopTime);
+
+  double sent = 0;
+  double received = 0;
+  for (auto it = m_reTransmissionTracker.begin ();
+       it != m_reTransmissionTracker.end ();
+       ++it)
+    {
+      if ((*it).second.firstAttempt >= startTime && (*it).second.firstAttempt <= stopTime)
+        {
+          sent++;
+          NS_LOG_DEBUG ("Found a packet");
+          NS_LOG_DEBUG ("Number of attempts: " << unsigned(it->second.reTxAttempts) <<
+                        ", successful: " << it->second.successful);
+          if (it->second.successful)
+            {
+              received++;
+            }
+        }
+    }
+
+  return std::to_string (sent) + " " +
+    std::to_string (received);
+}
 
 }
 }
