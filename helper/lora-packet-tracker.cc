@@ -74,6 +74,7 @@ LoraPacketTracker::RequiredTransmissionsCallback (uint8_t reqTx, bool success,
   RetransmissionStatus entry;
   entry.firstAttempt = firstAttempt;
   entry.finishTime = Simulator::Now ();
+  entry.senderId = Simulator::GetContext ();
   entry.reTxAttempts = reqTx;
   entry.successful = success;
 
@@ -555,11 +556,69 @@ LoraPacketTracker::CountMacPacketsGloballyCpsr (Time startTime, Time stopTime)
         {
           sent++;
           NS_LOG_DEBUG ("Found a packet");
-          NS_LOG_DEBUG ("Number of attempts: " << unsigned(it->second.reTxAttempts) <<
+          NS_LOG_DEBUG ("Sender Id: " << it->second.senderId <<
+                        ", Number of attempts: " << unsigned(it->second.reTxAttempts) <<
                         ", successful: " << it->second.successful);
           if (it->second.successful)
             {
               received++;
+            }
+        }
+    }
+
+  return std::to_string (sent) + " " +
+    std::to_string (received);
+}
+
+std::vector<int>
+LoraPacketTracker::CountMacPacketsCpsrPerEd (Time startTime, Time stopTime, int edId)
+{
+  NS_LOG_FUNCTION (this << startTime << stopTime);
+
+  std::vector<int> packetCounts (2, 0);
+
+  for (auto it = m_reTransmissionTracker.begin ();
+       it != m_reTransmissionTracker.end ();
+       ++it)
+    {
+      if (it->second.senderId == edId &&
+          (*it).second.firstAttempt >= startTime && (*it).second.firstAttempt <= stopTime)
+        {
+          packetCounts.at (0) += unsigned(it->second.reTxAttempts);
+          NS_LOG_DEBUG ("Sender Id: " << it->second.senderId <<
+                        ", Number of attempts: " << unsigned(it->second.reTxAttempts) <<
+                        ", successful: " << it->second.successful);
+          if (it->second.successful)
+            {
+              packetCounts.at (1)++;
+            }
+        }
+    }
+
+  return packetCounts;
+}
+
+std::string
+LoraPacketTracker::PrintMacPacketsCpsrPerEd (Time startTime, Time stopTime, int edId)
+{
+  NS_LOG_FUNCTION (this << startTime << stopTime);
+
+  double sent = 0;
+  double received = 0;
+  for (auto it = m_reTransmissionTracker.begin ();
+       it != m_reTransmissionTracker.end ();
+       ++it)
+    {
+      if (it->second.senderId == edId &&
+          (*it).second.firstAttempt >= startTime && (*it).second.firstAttempt <= stopTime)
+        {
+          sent += unsigned(it->second.reTxAttempts);
+          NS_LOG_DEBUG ("Sender Id: " << it->second.senderId <<
+                        ", Number of attempts: " << unsigned(it->second.reTxAttempts) <<
+                        ", successful: " << it->second.successful);
+          if (it->second.successful)
+            {
+              received ++;
             }
         }
     }

@@ -59,6 +59,7 @@ struct MacPacketStatus
 
 struct RetransmissionStatus
 {
+  uint32_t senderId;
   Time firstAttempt;
   Time finishTime;
   uint8_t reTxAttempts;
@@ -181,6 +182,28 @@ public:
    * of packets that generated a successful acknowledgment.
    */
   std::string CountMacPacketsGloballyCpsr (Time startTime, Time stopTime);
+
+  /**
+   * Count packets to evaluate  performance at MAC level at each end device
+   * In this case, a MAC layer packet is labeled as successful if it
+   * was successful at at least one of the available gateways, and if
+   * the corresponding acknowledgment was correctly delivered at the device.
+   *
+   * This returns a vector containing the number of sent packets and the number
+   * of packets that generated a successful acknowledgment.
+   */
+  std::vector<int> CountMacPacketsCpsrPerEd (Time startTime, Time stopTime, int edId);
+
+  /**
+   * Count packets to evaluate  performance at MAC level at each end device
+   * In this case, a MAC layer packet is labeled as successful if it
+   * was successful at at least one of the available gateways, and if
+   * the corresponding acknowledgment was correctly delivered at the device.
+   *
+   * This returns a string containing the number of sent packets and the number
+   * of packets that generated a successful acknowledgment.
+   */
+  std::string PrintMacPacketsCpsrPerEd (Time startTime, Time stopTime, int edId);
 private:
   PhyPacketData m_packetTracker;
   MacPacketData m_macPacketTracker;
