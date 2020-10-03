@@ -541,6 +541,57 @@ LoraPacketTracker::CountMacPacketsGlobally (Time startTime, Time stopTime)
     std::to_string (received);
 }
 
+std::vector<int>
+LoraPacketTracker::CountMacPacketsPerEd (Time startTime, Time stopTime, int edId)
+{
+  NS_LOG_FUNCTION (this << startTime << stopTime);
+
+  std::vector<int> packetCounts (2, 0);
+
+  for (auto it = m_macPacketTracker.begin ();
+       it != m_macPacketTracker.end ();
+       ++it)
+    {
+      if ((*it).second.senderId == edId &&
+          (*it).second.sendTime >= startTime && (*it).second.sendTime <= stopTime)
+        {
+          packetCounts.at (0) ++;
+          if ((*it).second.receptionTimes.size ())
+            {
+              packetCounts.at (1) ++;
+            }
+        }
+    }
+
+  return packetCounts;
+}
+
+std::string
+LoraPacketTracker::PrintMacPacketsPerEd (Time startTime, Time stopTime, int edId)
+{
+  NS_LOG_FUNCTION (this << startTime << stopTime);
+
+  double sent = 0;
+  double received = 0;
+  for (auto it = m_macPacketTracker.begin ();
+       it != m_macPacketTracker.end ();
+       ++it)
+    {
+      if ((*it).second.senderId == edId &&
+          (*it).second.sendTime >= startTime && (*it).second.sendTime <= stopTime)
+        {
+          sent++;
+          if ((*it).second.receptionTimes.size ())
+            {
+              received++;
+            }
+        }
+    }
+
+  return std::to_string (sent) + " " +
+    std::to_string (received);
+}
+
 std::string
 LoraPacketTracker::CountMacPacketsGloballyCpsr (Time startTime, Time stopTime)
 {

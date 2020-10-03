@@ -173,6 +173,26 @@ public:
   std::string CountMacPacketsGlobally (Time startTime, Time stopTime);
 
   /**
+   * Count packets to evaluate the performance at MAC level of each end device.
+   * In this case, a MAC layer packet is labeled as successful if it
+   * was successful at at least one of the available gateways.
+   *
+   * This returns a vector containing the number of sent packets and the number
+   * of packets that were received by at least one gateway.
+   */
+  std::vector<int> CountMacPacketsPerEd (Time startTime, Time stopTime, int edId);
+
+  /**
+   * Count packets to evaluate the performance at MAC level of each end device.
+   * In this case, a MAC layer packet is labeled as successful if it
+   * was successful at at least one of the available gateways.
+   *
+   * This returns a string containing the number of sent packets and the number
+   * of packets that were received by at least one gateway.
+   */
+  std::string PrintMacPacketsPerEd (Time startTime, Time stopTime, int edId);
+
+  /**
    * Count packets to evaluate the global performance at MAC level of the whole
    * network. In this case, a MAC layer packet is labeled as successful if it
    * was successful at at least one of the available gateways, and if
@@ -184,7 +204,7 @@ public:
   std::string CountMacPacketsGloballyCpsr (Time startTime, Time stopTime);
 
   /**
-   * Count packets to evaluate  performance at MAC level at each end device
+   * Count packets to evaluate the performance at MAC level of each end device
    * In this case, a MAC layer packet is labeled as successful if it
    * was successful at at least one of the available gateways, and if
    * the corresponding acknowledgment was correctly delivered at the device.
@@ -195,7 +215,7 @@ public:
   std::vector<int> CountMacPacketsCpsrPerEd (Time startTime, Time stopTime, int edId);
 
   /**
-   * Count packets to evaluate  performance at MAC level at each end device
+   * Count packets to evaluate the performance at MAC level of each end device
    * In this case, a MAC layer packet is labeled as successful if it
    * was successful at at least one of the available gateways, and if
    * the corresponding acknowledgment was correctly delivered at the device.
