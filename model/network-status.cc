@@ -135,7 +135,7 @@ NetworkStatus::GetBestGatewayForDevice (LoraDeviceAddress deviceAddress, int win
     }
   else if (window == 2)
     {
-      replyFrequency = edStatus->GetSecondReceiveWindowFrequency();
+      replyFrequency = edStatus->GetMac ()->GetSecondReceiveWindowFrequency();
     }
   else
     {
@@ -192,7 +192,7 @@ NetworkStatus::GetReplyForDevice (LoraDeviceAddress edAddress, int windowNumber)
       break;
     case 2:
       tag.SetDataRate (edStatus->GetMac ()->GetSecondReceiveWindowDataRate ());
-      tag.SetFrequency (edStatus->GetSecondReceiveWindowFrequency ());
+      tag.SetFrequency (edStatus->GetMac ()->GetSecondReceiveWindowFrequency ());
       break;
     }
 

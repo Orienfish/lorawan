@@ -367,14 +367,7 @@ LorawanMacHelper::ConfigureForUsRegion (Ptr<GatewayLorawanMac> gwMac) const
       gwPhy->ResetReceptionPaths ();
 
       std::vector<double> frequencies;
-      frequencies.push_back (902.3);
-      frequencies.push_back (902.5);
-      frequencies.push_back (902.7);
-      frequencies.push_back (902.9);
-      frequencies.push_back (903.1);
-      frequencies.push_back (903.3);
-      frequencies.push_back (903.5);
-      frequencies.push_back (903.7);
+      frequencies.push_back (923.3);
 
       for (auto &f : frequencies)
         {
@@ -446,6 +439,7 @@ LorawanMacHelper::ApplyCommonUsConfigurations (Ptr<LorawanMac> lorawanMac) const
   // channelHelper.AddSubBand (910.2, 911.8, 0.01, 30);
   // channelHelper.AddSubBand (911.8, 913.4, 0.01, 30);
   // channelHelper.AddSubBand (913.4, 915.0, 0.01, 30);
+  channelHelper.AddSubBand (923.0, 923.6, 0.1, 30);
 
 
   //////////////////////
