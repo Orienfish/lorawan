@@ -356,7 +356,7 @@ protected:
   {
     Time firstAttempt;
     Ptr<Packet> packet = 0;
-    bool waitingAck = true;
+    bool waitingAck = false;
     uint8_t retxLeft;
   };
 
