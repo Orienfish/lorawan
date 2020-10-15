@@ -366,7 +366,7 @@ LoraPacketTracker::CountPhyPacketsPerEd (Time startTime, Time stopTime,
 
       if ((*itPhy).second.sendTime >= startTime && (*itPhy).second.sendTime <= stopTime)
         {
-          if ((*itPhy).second.senderId == edId)
+          if ((*itPhy).second.senderId == (uint32_t) edId)
             {
               packetCounts.at (0)++;
 
@@ -408,7 +408,7 @@ LoraPacketTracker::PrintPhyPacketsPerEd (Time startTime, Time stopTime,
 
       if ((*itPhy).second.sendTime >= startTime && (*itPhy).second.sendTime <= stopTime)
         {
-          if ((*itPhy).second.senderId == edId)
+          if ((*itPhy).second.senderId == (uint32_t) edId)
             {
               sent ++;
 
@@ -450,7 +450,7 @@ LoraPacketTracker::CountPhyPacketsPerGwEd (Time startTime, Time stopTime,
 
       if ((*itPhy).second.sendTime >= startTime && (*itPhy).second.sendTime <= stopTime)
         {
-          if ((*itPhy).second.outcomes.count (gwId) > 0 && (*itPhy).second.senderId == edId)
+          if ((*itPhy).second.outcomes.count (gwId) > 0 && (*itPhy).second.senderId == (uint32_t) edId)
             {
               packetCounts.at (0)++;
 
@@ -510,7 +510,7 @@ LoraPacketTracker::PrintPhyPacketsPerGwEd (Time startTime, Time stopTime,
 
       if ((*itPhy).second.sendTime >= startTime && (*itPhy).second.sendTime <= stopTime)
         {
-          if ((*itPhy).second.outcomes.count (gwId) > 0 && (*itPhy).second.senderId == edId)
+          if ((*itPhy).second.outcomes.count (gwId) > 0 && (*itPhy).second.senderId == (uint32_t) edId)
             {
               packetCounts.at (0)++;
 
@@ -595,7 +595,7 @@ LoraPacketTracker::CountMacPacketsPerEd (Time startTime, Time stopTime, int edId
        it != m_macPacketTracker.end ();
        ++it)
     {
-      if ((*it).second.senderId == edId &&
+      if ((*it).second.senderId == (uint32_t) edId &&
           (*it).second.sendTime >= startTime && (*it).second.sendTime <= stopTime)
         {
           packetCounts.at (0) ++;
@@ -620,7 +620,7 @@ LoraPacketTracker::PrintMacPacketsPerEd (Time startTime, Time stopTime, int edId
        it != m_macPacketTracker.end ();
        ++it)
     {
-      if ((*it).second.senderId == edId &&
+      if ((*it).second.senderId == (uint32_t) edId &&
           (*it).second.sendTime >= startTime && (*it).second.sendTime <= stopTime)
         {
           sent++;
@@ -675,7 +675,7 @@ LoraPacketTracker::CountMacPacketsCpsrPerEd (Time startTime, Time stopTime, int 
        it != m_reTransmissionTracker.end ();
        ++it)
     {
-      if (it->second.senderId == edId &&
+      if (it->second.senderId == (uint32_t) edId &&
           (*it).second.firstAttempt >= startTime && (*it).second.firstAttempt <= stopTime)
         {
           packetCounts.at (0) += unsigned(it->second.reTxAttempts);
@@ -703,7 +703,7 @@ LoraPacketTracker::PrintMacPacketsCpsrPerEd (Time startTime, Time stopTime, int 
        it != m_reTransmissionTracker.end ();
        ++it)
     {
-      if (it->second.senderId == edId &&
+      if (it->second.senderId == (uint32_t) edId &&
           (*it).second.firstAttempt >= startTime && (*it).second.firstAttempt <= stopTime)
         {
           sent += unsigned(it->second.reTxAttempts);
