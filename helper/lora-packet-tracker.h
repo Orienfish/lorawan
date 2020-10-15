@@ -130,17 +130,24 @@ public:
 
   /**
    * Count packets to evaluate the performance at PHY level of a specific
+   * end device.
+   */
+  std::string PrintPhyPacketsPerEd (Time startTime, Time stopTime,
+                                    int edId);
+
+  /**
+   * Count packets to evaluate the performance at PHY level of a specific
    * end device and a gateway.
    */
   std::vector<int> CountPhyPacketsPerGwEd (Time startTime, Time stopTime,
-                                         int gwId, int edId);
+                                           int gwId, int edId);
 
   /**
    * Count packets to evaluate the performance at PHY level of a specific
    * end device and a gateway.
    */
   std::string PrintPhyPacketsPerGwEd (Time startTime, Time stopTime,
-                                         int gwId, int edId);
+                                      int gwId, int edId);
 
   /**
    * Count packets to evaluate the performance at MAC level of a specific

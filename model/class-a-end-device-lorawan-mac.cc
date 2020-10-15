@@ -303,7 +303,6 @@ ClassAEndDeviceLorawanMac::OpenFirstReceiveWindow (void)
   // Schedule return to sleep after "at least the time required by the end
   // device's radio transceiver to effectively detect a downlink preamble"
   // (LoraWAN specification)
-  std::cout << m_receiveWindowDurationInSymbols*tSym << std::endl;
   m_closeFirstWindow = Simulator::Schedule (Seconds (m_receiveWindowDurationInSymbols*tSym),
                                             &ClassAEndDeviceLorawanMac::CloseFirstReceiveWindow, this); //m_receiveWindowDuration
 
