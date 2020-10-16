@@ -120,6 +120,10 @@ SimpleGatewayLoraPhy::StartReceive (Ptr<Packet> packet, double rxPowerDbm, uint8
 {
   NS_LOG_FUNCTION (this << packet << rxPowerDbm << duration << frequencyMHz);
 
+  // If the gateway is down
+  if (!m_status)
+    return;
+
   // Fire the trace source
   m_phyRxBeginTrace (packet);
 
@@ -305,6 +309,18 @@ SimpleGatewayLoraPhy::EndReceive (Ptr<Packet> packet, Ptr<LoraInterferenceHelper
           return;
         }
     }
+}
+
+bool
+SimpleGatewayLoraPhy::GetStatus ()
+{
+  return m_status;
+}
+
+void
+SimpleGatewayLoraPhy::SetStatus (bool targetStatus)
+{
+  m_status = targetStatus;
 }
 
 } // namespace lorawan

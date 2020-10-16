@@ -55,7 +55,13 @@ public:
   virtual void Send (Ptr<Packet> packet, LoraTxParameters txParams,
                      double frequencyMHz, double txPowerDbm);
 
+  // Interfaces to the status variable indicating whether the gateway
+  // is down
+  bool GetStatus ();
+  void SetStatus (bool targetStatus);
+
 private:
+	bool m_status = true;
 };
 
 } /* namespace ns3 */
