@@ -60,6 +60,10 @@ public:
   bool GetStatus ();
   void SetStatus (bool targetStatus);
 
+  // Interfaces to add interferences
+  void AddInterference (Time duration, double rxPowerdBm, 
+                        uint8_t spreadingFactor, double frequencyMHz);
+
 private:
 	bool m_status = true;
 };

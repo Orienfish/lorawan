@@ -321,6 +321,16 @@ void
 SimpleGatewayLoraPhy::SetStatus (bool targetStatus)
 {
   m_status = targetStatus;
+  return;
+}
+
+void
+SimpleGatewayLoraPhy::AddInterference (Time duration, double rxPowerdBm, 
+                                       uint8_t spreadingFactor, double frequencyMHz)
+{
+   Ptr<Packet> packet;
+   m_interference.Add (duration, rxPowerdBm, spreadingFactor, packet, frequencyMHz);
+   return;
 }
 
 } // namespace lorawan
